@@ -1,0 +1,1 @@
+SELECT mean("value") FROM server_up GROUP BY time(1m) | value < 0.25 | CUPS Server is Down!!!!
