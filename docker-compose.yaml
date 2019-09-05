@@ -22,19 +22,19 @@ services:
     volumes:
       - "./grafana:/var/lib/grafana"
 
-  alerts:
-    build:
-      context: ./
-      dockerfile: alerts/Dockerfile
-    ports:
-      - "9450:9450"
-    environment:
-      - "SERVER_PORT=9450"
-      - "SERVER_DOMAIN=10.0.0.10"
-      - "SEND_ADDRESS=mr.zacharycotton@gmail.com"
-      - "SEND_ADDRESS_PASSWORD=#rtf%utn00bx"
-      - "RECV_ADDRESS=mr.zacharycotton@gmail.com"
-      - "TZ=America/Los_Angeles"
+  #alerts:
+  #  build:
+  #    context: ./
+  #    dockerfile: alerts/Dockerfile
+  #  ports:
+  #    - "9450:9450"
+  #  environment:
+  #    - "SERVER_PORT=9450"
+  #    - "SERVER_DOMAIN=10.0.0.10"
+  #    - "SEND_ADDRESS=mr.zacharycotton@gmail.com"
+  #    - "SEND_ADDRESS_PASSWORD=#rtf%utn00bx"
+  #    - "RECV_ADDRESS=mr.zacharycotton@gmail.com"
+  #    - "TZ=America/Los_Angeles"
 
   # ============== SENSORS =================
 
@@ -50,12 +50,12 @@ services:
       - "INFLUXDB_PASS=grafana"
       - "INFLUXDB_HOST=influxdb"
       - "INFLUXDB_PORT=8086"
-      - "LINK_TO=10.0.0.1"
+      - "LINK_TO=10.20.96.1"
 
-  cups_queue_size:
+  internet_connectivity:
     build:
       context: ./
-      dockerfile: sensors/cups_queue_size/Dockerfile
+      dockerfile: sensors/link_connectivity/Dockerfile
     depends_on:
       - influxdb
     environment:
@@ -64,13 +64,26 @@ services:
       - "INFLUXDB_PASS=grafana"
       - "INFLUXDB_HOST=influxdb"
       - "INFLUXDB_PORT=8086"
-      - "CUPS_HOST=10.0.0.10"
-      - "CUPS_PORT=631"
+      - "LINK_TO=8.8.8.8"
 
-  cups_up:
+  cloyne_connectivity:
+     build:
+       context: ./
+       dockerfile: sensors/link_connectivity/Dockerfile
+     depends_on:
+       - influxdb
+     environment:
+       - "INFLUXDB_DB=grafana"
+       - "INFLUXDB_USER=grafana"
+       - "INFLUXDB_PASS=grafana"
+       - "INFLUXDB_HOST=influxdb"
+       - "INFLUXDB_PORT=8086"
+       - "LINK_TO=10.20.32.1"
+
+  he_connectivity:
     build:
       context: ./
-      dockerfile: sensors/server_up/Dockerfile
+      dockerfile: sensors/link_connectivity/Dockerfile
     depends_on:
       - influxdb
     environment:
@@ -79,4 +92,34 @@ services:
       - "INFLUXDB_PASS=grafana"
       - "INFLUXDB_HOST=influxdb"
       - "INFLUXDB_PORT=8086"
-      - "SERVER_URL=http://10.0.0.10:631/printers"
+      - "LINK_TO=64.62.133.41"
+
+
+  #cups_queue_size:
+  #  build:
+  #    context: ./
+  #    dockerfile: sensors/cups_queue_size/Dockerfile
+  #  depends_on:
+  #    - influxdb
+  #  environment:
+  #    - "INFLUXDB_DB=grafana"
+  #    - "INFLUXDB_USER=grafana"
+  #    - "INFLUXDB_PASS=grafana"
+  #    - "INFLUXDB_HOST=influxdb"
+  #    - "INFLUXDB_PORT=8086"
+  #    - "CUPS_HOST=10.0.0.10"
+  #    - "CUPS_PORT=631"
+
+  #cups_up:
+  #  build:
+  #    context: ./
+  #    dockerfile: sensors/server_up/Dockerfile
+  #  depends_on:
+  #    - influxdb
+  #  environment:
+  #    - "INFLUXDB_DB=grafana"
+  #    - "INFLUXDB_USER=grafana"
+  #    - "INFLUXDB_PASS=grafana"
+  #    - "INFLUXDB_HOST=influxdb"
+  #    - "INFLUXDB_PORT=8086"
+  #    - "SERVER_URL=http://10.0.0.10:631/printers"
