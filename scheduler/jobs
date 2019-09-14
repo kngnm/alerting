@@ -1,0 +1,10 @@
+# Time (0:00-22:59) | CMD (bash)
+
+# Reboot APs
+# 3:00 | ssh admin@10.20.96.6 reboot
+3:02 | ssh admin@10.20.96.7 reboot
+3:04 | ssh admin@10.20.96.8 reboot
+3:06 | ssh admin@10.20.96.9 reboot
+3:08 | ssh admin@10.20.96.10 reboot
+3:10 | ssh admin@10.20.96.11 reboot
+3:12 | ssh admin@10.20.96.12 reboot
